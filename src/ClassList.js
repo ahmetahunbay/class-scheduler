@@ -1,8 +1,21 @@
-import React from 'react';
+import React, {useState} from 'react';
 import ClassItem from "./ClassItem";
 import { useDrop } from 'react-dnd';
 
 const ClassList = ({classes, scheduledClasses, arePrerequisitesMet, onDrop}) => {
+    const [selectedClass, setSelectedClass] = useState(null);
+
+    const handleClassClick = (classItem) => {
+        if (selectedClass && selectedClass.id === classItem.id) {
+            setSelectedClass(null); // Deselect if clicked again
+        } else {
+            setSelectedClass(classItem); // Select the class
+        }
+    };
+
+    const isSelected = (classItem) => {
+        return selectedClass && selectedClass.id === classItem.id;
+    };
 
     const [{isOver}, drop] = useDrop(() => ({
         accept: 'CLASS',
@@ -22,6 +35,8 @@ const ClassList = ({classes, scheduledClasses, arePrerequisitesMet, onDrop}) => 
                         classItem = {classItem}
                         isPlanned = {false}
                         prerequisitesMet={arePrerequisitesMet(classItem, scheduledClasses)}
+                        onClick={handleClassClick}
+                        isSelected={isSelected(classItem)}
                     />
                 ))}
             </div>

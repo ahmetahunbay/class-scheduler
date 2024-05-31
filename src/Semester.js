@@ -1,8 +1,22 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useDrop} from 'react-dnd';
 import ClassItem from "./ClassItem";
 
 const Semester = ({semester, onDrop, arePrerequisitesMetForSemester, semesters }) => {
+    const [selectedClass, setSelectedClass] = useState(null);
+
+    const handleClassClick = (classItem) => {
+        if (selectedClass && selectedClass.id === classItem.id) {
+            setSelectedClass(null); // Deselect if clicked again
+        } else {
+            setSelectedClass(classItem); // Select the class
+        }
+    };
+
+    const isSelected = (classItem) => {
+        return selectedClass && selectedClass.id === classItem.id;
+    };
+
     const [{isOver}, drop] = useDrop(() => ({
         accept: 'CLASS',
         drop: (item) => onDrop(item.classItem, semester, 'semester'),
@@ -30,6 +44,8 @@ const Semester = ({semester, onDrop, arePrerequisitesMetForSemester, semesters }
                     classItem={classItem}
                     isPlanned={() => true}
                     prerequisitesMet={arePrerequisitesMetForSemester(classItem, semester, semesters)}
+                    onClick={handleClassClick}
+                    isSelected={isSelected(classItem)}
                 />
             ))}
         </div>
