@@ -1,5 +1,5 @@
 import React from 'react';
-import ClassValidator from './ClassValidator';
+import MajorValidator from './MajorValidator';
 
 const SelectedMajor = ({ major, scheduledClasses }) => {
     return (
@@ -11,10 +11,12 @@ const SelectedMajor = ({ major, scheduledClasses }) => {
                         border: '1px solid black',
                         padding: '8px',
                         margin: '4px',
-                        backgroundColor: ClassValidator.categorySatisfied(category, scheduledClasses) ? 'lightgreen': 'lightcoral',
+                        backgroundColor: MajorValidator.categorySatisfied(category, scheduledClasses) ? 'lightgreen': 'lightcoral',
                     }}
                 >
                     <label>{category.name}</label>
+                    {!MajorValidator.categorySatisfied(category, scheduledClasses) &&
+                        <label>{MajorValidator.stringifyCategoryRequirements(category, scheduledClasses)}</label>}
                 </div>
             ))}
         </div>

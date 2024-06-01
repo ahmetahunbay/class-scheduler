@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {useDrop} from 'react-dnd';
 import ClassItem from "./ClassItem";
 
-const Semester = ({semester, onDrop, arePrerequisitesMetForSemester, semesters }) => {
+const Semester = ({semester, onDrop, arePrerequisitesMetForSemester, semesters, prerequisiteStringifyForSemester }) => {
     const [selectedClass, setSelectedClass] = useState(null);
 
     const handleClassClick = (classItem) => {
@@ -46,6 +46,7 @@ const Semester = ({semester, onDrop, arePrerequisitesMetForSemester, semesters }
                     prerequisitesMet={arePrerequisitesMetForSemester(classItem, semester, semesters)}
                     onClick={handleClassClick}
                     isSelected={isSelected(classItem)}
+                    prerequisiteStringify={prerequisiteStringifyForSemester(classItem, semester, semesters)}
                 />
             ))}
         </div>

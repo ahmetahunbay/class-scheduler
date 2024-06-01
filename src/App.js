@@ -22,11 +22,11 @@ const App = () => {
       genEds: ["LAS"],
       level: "Elementary",
       prerequisites: [
-        { type: 'or', conditions: [1, 2, { type: 'and', conditions: [{ type: 'gen-ed', ids: ['QRB'] }, 3] }] },
+        { type: 'or', conditions: [1, 2, { type: 'and', conditions: [{ type: 'gen-ed', conditions: ['QRB'] }, 3] }] },
         { type: 'not', conditions: [3] },
         5,
         4,
-        { type: 'gen-ed', ids: ['QRA'] }
+        { type: 'gen-ed', conditions: ['QRA'] }
       ]
     },
   ];
@@ -40,7 +40,7 @@ const App = () => {
       categories: [
         {name: "general classes", type: "category", courses: [5], credits: 3},
         {name: "math and science", type: "category", courses: [
-          { type: 'or', courses: [1, 2] }
+          { type: 'and', courses: [1, 2] }
         ], credits: 3},
         {name: "humanities", courses: [{
           type: "category",
@@ -48,7 +48,7 @@ const App = () => {
           courses: [4]
         }], credits: 2, numCourses: 1},
         {name: "comp sci breadth", type: "category", courses: [6], credits: 3}],
-      relevantCourses: [5, 1, 2, 4, 6]
+      relevantCourses: [1, 2, 3, 4, 5, 6]
     },
   ];
 
@@ -147,6 +147,7 @@ const App = () => {
               scheduledClasses={getScheduledClasses()}
               arePrerequisitesMet={ClassValidator.arePrerequisitesMet}
               onDrop={handleDrop}
+              prerequisiteStringify={ClassValidator.prereqStringify}
             />
           </div>
           <div className="semesters-container">
@@ -157,6 +158,7 @@ const App = () => {
                 arePrerequisitesMetForSemester={ClassValidator.arePrerequisitesMetForSemester}
                 onDrop={handleDrop}
                 semesters={semesters}
+                prerequisiteStringifyForSemester={ClassValidator.prerequisiteStringifyForSemester}
               />
             ))}
           </div>

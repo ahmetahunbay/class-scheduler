@@ -1,7 +1,7 @@
 import React from 'react';
 import {useDrag} from 'react-dnd';
 
-const ClassItem = ({ classItem, isPlanned, prerequisitesMet, onClick, isSelected }) => {
+const ClassItem = ({ classItem, isPlanned, prerequisitesMet, onClick, isSelected, prerequisiteStringify }) => {
     const [{isDragging}, drag] = useDrag(
         () => ({
             type: 'CLASS',
@@ -12,10 +12,6 @@ const ClassItem = ({ classItem, isPlanned, prerequisitesMet, onClick, isSelected
             }),
         }),
     );
-
-    const getPreReqText = () => {
-
-    };
 
     return (
         <div style={{position: 'relative'}}>
@@ -32,6 +28,7 @@ const ClassItem = ({ classItem, isPlanned, prerequisitesMet, onClick, isSelected
                 }}
             >
                 {classItem.name}
+                {prerequisiteStringify}
             </div>
             {isSelected && (
                 <div style={{
