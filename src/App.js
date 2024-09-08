@@ -29,28 +29,37 @@ const App = () => {
         { type: 'gen-ed', conditions: ['QRA'] }
       ]
     },
+    // New Classes
+    { id: 7, name: "Statistics", credits: 3, description: "Intro to Statistics", level: "Intermediate", genEds: ["QRB"], prerequisites: [] },
+    { id: 8, name: "Machine Learning", credits: 3, description: "ML basics", level: "Advanced", prerequisites: [7, 6] },
+    { id: 9, name: "Data Visualization", credits: 3, description: "Intro to Data Viz", level: "Intermediate", prerequisites: [7] },
   ];
-
-  const initialClasses = [];
-
+  
   const majors = [
     {
       id: 1,
       name: "Computer Science",
       categories: [
-        {name: "general classes", type: "category", courses: [5], credits: 3},
-        {name: "math and science", type: "category", courses: [
-          { type: 'and', courses: [1, 2] }
-        ], credits: 3},
-        {name: "humanities", courses: [{
-          type: "category",
-          name: "social sciences",
-          courses: [4]
-        }], credits: 2, numCourses: 1},
-        {name: "comp sci breadth", type: "category", courses: [6], credits: 3}],
+        { name: "general classes", type: "category", courses: [5], credits: 3 },
+        { name: "math and science", type: "category", courses: [{ type: 'and', courses: [1, 2] }], credits: 3 },
+        { name: "humanities", courses: [{ type: "category", name: "social sciences", courses: [4] }], credits: 2, numCourses: 1 },
+        { name: "comp sci breadth", type: "category", courses: [6], credits: 3 }
+      ],
       relevantCourses: [1, 2, 3, 4, 5, 6]
     },
+    {
+      id: 2,
+      name: "Data Science",
+      categories: [
+        { name: "math and stats", type: "category", courses: [1, 7], credits: 6 },
+        { name: "core data science", type: "category", courses: [8, 9], credits: 6 },
+        { name: "general electives", type: "category", courses: [3, 5], credits: 3 }
+      ],
+      relevantCourses: [1, 7, 8, 9, 3, 5]
+    }
   ];
+  
+  const initialClasses = []
 
   const initialSemesters = [
     { id: 1, name: 'Fall 2024', classes: [] },
@@ -97,24 +106,25 @@ const App = () => {
   };
 
   const handleMajorChange = (major, isChecked) => {
+    let updatedMajors;
     if (isChecked) {
-      const updatedMajors = [...selectedMajors, major];
+      updatedMajors = [...selectedMajors, major];
       setSelectedMajors(updatedMajors);
-      const majorClasses = totalClasses.filter(classItem => 
-        updatedMajors.some(m => m.relevantCourses.includes(classItem.id) )
-        && !classes.some(item => item.id === classItem.id) 
-        && !semesters.some(semester => semester.classes.some(item => item.id === classItem.id) ));
-      setClasses(majorClasses);
     } else {
-      const updatedMajors = selectedMajors.filter(m => m.id !== major.id);
+      updatedMajors = selectedMajors.filter(m => m.id !== major.id);
       setSelectedMajors(updatedMajors);
-      const newClasses = totalClasses.filter(classItem =>
-        updatedMajors.some(m => m.relevantCourses.includes(classItem.id))
-        && !classes.some(item => item.id === classItem.id)
-        && !semesters.some(semester => semester.classes.some(item => item.id === classItem.id))
-      );
-      setClasses(newClasses);
+      // const newClasses = totalClasses.filter(classItem =>
+      //   updatedMajors.some(m => m.relevantCourses.includes(classItem.id))
+      //   && !classes.some(item => item.id === classItem.id)
+      //   && !semesters.some(semester => semester.classes.some(item => item.id === classItem.id))
+      // );
+      // setClasses(newClasses);
     }
+    const majorClasses = totalClasses.filter(classItem => 
+      updatedMajors.some(m => m.relevantCourses.includes(classItem.id) )
+      //&& !classes.some(item => item.id === classItem.id) 
+      && !semesters.some(semester => semester.classes.some(item => item.id === classItem.id) ));
+    setClasses(majorClasses);
   };
 
   const getScheduledClasses = () => {

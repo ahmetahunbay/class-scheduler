@@ -8,13 +8,13 @@ class ClassValidator {
       return scheduledClasses.some(scheduledClass => scheduledClass.id === condition);
     }
     if (condition.type === 'or') {
-      return condition.conditions.some(cond => ClassValidator.checkCondition(cond, scheduledClasses));
+      return condition.conditions.some(cond => ClassValidator.checkCondition(cond, scheduledClasses, forSemester));
     } 
     if (condition.type === 'and') {
-      return condition.conditions.every(cond => ClassValidator.checkCondition(cond, scheduledClasses));
+      return condition.conditions.every(cond => ClassValidator.checkCondition(cond, scheduledClasses, forSemester));
     }
     if (forSemester && condition.type === 'not') {
-      return condition.conditions.every(cond => !ClassValidator.checkCondition(cond, scheduledClasses));
+      return condition.conditions.every(cond => !ClassValidator.checkCondition(cond, scheduledClasses, forSemester));
     }
     if (condition.type === 'gen-ed') {
       return condition.conditions.every(id => scheduledClasses.some(scheduledClass => scheduledClass.genEds != null && scheduledClass.genEds.includes(id)));
@@ -37,7 +37,7 @@ class ClassValidator {
     return prerequisites.filter(prereq => (typeof prereq === 'number') ? 
         !scheduledClasses.some(scheduledClass => scheduledClass.id === prereq) :
           ((prereq.type === 'gen-ed') ?  (prereq.conditions.some(preReqGenEd => !scheduledClasses.some(scheduledClass => scheduledClass.genEds != null && scheduledClass.genEds.includes(preReqGenEd)))) :
-           ( prereq.type === 'or' ? !this.checkCondition(prereq.conditions, scheduledClasses) :
+           ( prereq.type === 'or' ? !this.checkCondition(prereq.conditions, scheduledClasses, forSemester) :
               (prereq.type === 'not' ? (forSemester ? !this.checkCondition(prereq, scheduledClasses, forSemester) : false) :
               true)))
       ).map(prereq => (typeof prereq !== 'number' && prereq.type === 'and') ?
